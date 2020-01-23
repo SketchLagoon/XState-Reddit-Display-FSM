@@ -1,5 +1,4 @@
-import { Machine } from "./xstate";
-import { assign } from "xstate/lib/actionTypes";
+import { Machine, assign } from "xstate";
 
 function invokeFetchSubreddit(context) {
   const { subreddit } = context;
@@ -9,7 +8,7 @@ function invokeFetchSubreddit(context) {
     .then(json => json.data.children.map(child => child.data));
 }
 
-const redditMachine = Machine({
+export const redditMachine = Machine({
   id: "reddit",
   initial: "idle",
   context: {
@@ -26,10 +25,10 @@ const redditMachine = Machine({
             id: "fetch-subreddit",
             src: invokeFetchSubreddit,
             onDone: {
-                target: 'loaded',
-                actions: assign({
-                    posts: (context, event) => event.data
-                })
+              target: "loaded",
+              actions: assign({
+                posts: (context, event) => event.data
+              })
             },
             onError: "failed"
           }
@@ -49,7 +48,8 @@ const redditMachine = Machine({
   }
 });
 
-const selectEvent = {
-  type: "SELECT", //event type
-  name: "reactjs" //subreddit name
-};
+// const selectEvent = {
+//   type: "SELECT", //event type
+//   name: "reactjs" //subreddit name
+// };
+
